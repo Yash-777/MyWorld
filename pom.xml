@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <groupId>com.github.yash777</groupId>
+  <artifactId>myworld</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>MyWorld modular project</name>
+  <description>Spring Boot modular project structure for our MyWorld project</description>
+  
+  <url>https://spring.io/projects/spring-boot</url>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+    </license>
+  </licenses>
+  <inceptionYear>2025</inceptionYear>
+  
+  <scm>
+    <url>https://github.com/Yash-777/MyWorld</url>
+  </scm>
+
+<!-- The location of the parent project, if one exists. Values from the parent project 
+ will be the default for this project if they are left unspecified. The location is 
+ given as a group ID, artifact ID and version. -->
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.7.18</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	
+	<!-- A listing of project-local build profiles which will modify the build process when activated. -->
+	<profiles></profiles>
+	
+	
+	<properties>
+		
+		<java.version>17</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		
+		<lombok.version>1.18.30</lombok.version>
+	</properties>
+		
+	<modules>
+		<module>myworld-api</module>
+	</modules>
+	
+	<!-- Default dependency information for projects that inherit from this one.
+	All the dependencies are configured here with <groupId> <artifactId> <version>
+	So, that in child modules we can access directly with out configuring version
+	
+	EX: spring-boot-dependencies <dependencyManagement>
+	<dependency>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-starter-web</artifactId>
+       <version>2.7.18</version>
+     </dependency>
+	 -->
+	<dependencyManagement>
+	</dependencyManagement>
+	
+	<!-- dependencies associated with this module and its sub-modules. -->
+	<dependencies>
+		<dependency>
+	        <groupId>org.projectlombok</groupId>
+	        <artifactId>lombok</artifactId>
+	        <version>${lombok.version}</version>
+	    </dependency>
+	    
+	    <!-- Spring Boot dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	
+</project>
