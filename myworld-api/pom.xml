@@ -14,7 +14,10 @@
   <description>Contains API interfaces and DTOs (Data Transfer Objects)</description>
   
   <dependencies>
-  
+	<!-- 
+	OptionalLiveReloadServer       : LiveReload server is running on port 35729
+	LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+	 -->
 	<dependency>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-devtools</artifactId>
@@ -22,6 +25,29 @@
 		<optional>true</optional>
 	</dependency>
 		
+<!-- You're trying to add a child module (myapp-common) as a dependency in your main application module, which is a very common setup in a multi-module Maven project.
+myapp-parent/
+│
+├── myapp-common/         # Shared module with common code (like logging, DTOs, utils)
+│   └── pom.xml
+│
+├── myapp-application/    # Main app module that needs to use common module
+│   └── pom.xml
+│
+└── pom.xml               # Parent POM (aggregator)
+ -->
+	<dependency>
+		<groupId>${myapp.groupId}</groupId>
+		<artifactId>myworld-common</artifactId>
+		<version>${myapp.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>${myapp.groupId}</groupId>
+		<artifactId>myworld-service</artifactId>
+		<version>${myapp.version}</version>
+	</dependency>
+	
+	<!-- Other dependencies -->
 	<dependency>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-web</artifactId>

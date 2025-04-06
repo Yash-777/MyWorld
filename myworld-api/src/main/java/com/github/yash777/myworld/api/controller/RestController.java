@@ -2,6 +2,9 @@ package com.github.yash777.myworld.api.controller;
 
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +30,19 @@ import lombok.extern.slf4j.Slf4j;
 @org.springframework.web.bind.annotation.RequestMapping(value = "/sample")
 @Slf4j
 public class RestController {
+    public RestController() {
+        log.info("🚧 RestController constructor: Before @Autowired and properties are set");
+    }
 	{
-		log.info("RestController Bean created.");
-		System.out.println("RestController Bean created.");
+		log.info("RestController - This runs immediately after constructor call, BEFORE dependencies are injected.");
+		System.out.println("RestController - This runs immediately after constructor call, BEFORE dependencies are injected.");
 	}
-
+    @PostConstruct
+    public void init() {
+        log.info("✅ RestController Bean fully created and dependencies injected.");
+        System.out.println("✅ RestController Bean fully created and dependencies injected.");
+    }
+    
 	@RequestMapping(value = "/text", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
 	public String getSampleText() {
 		log.info("Get Sample response as text.");

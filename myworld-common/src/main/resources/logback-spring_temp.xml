@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Tips:
+Common module shouldn't override other modules' log configs. Instead, you can provide a reusable logback-spring.xml that 
+consuming modules can import or base theirs on.
+
+You can define a logback-common.xml and include it in the main service’s logback-spring.xml like:
+
+<include resource="logback-common.xml"/>
+
+
+<configuration scan="true">: Automatically reloads the config file if it changes (optional in dev).
+ -->
+<configuration scan="true">
+
+    <!--
+      This Logback configuration is used for rolling file logging.
+      It supports dynamic configuration using Spring Boot placeholders resolved
+      from application.properties or manually loaded properties like log-config.properties.
+
+      Required properties:
+        log.file-path      = Directory where log files are stored
+        log.file-name      = Base log file name
+        log.pattern        = Log format pattern
+        log.max-size-mb    = Maximum size in MB before a log file rolls
+        log.max-backups    = Maximum number of backup files to keep
+    -->
+
+    <!-- ========== LOGGING PROPERTIES ========== -->
+    <!-- These properties can be injected via Spring's Environment (resolved from config files) -->
+
+    <!-- Directory where logs will be written. Defaults to "logs" if not specified -->
+    <property name="LOG_PATH" value="${log.file-path:-logs}" />
+
+    <!-- Name of the main log file (e.g., app.log). Defaults to "app.log" -->
+    <property name="LOG_FILE_NAME" value="${log.file-name:-app.log}" />
+
+    <!-- Pattern used to format each log message. Defaults to a readable pattern -->
+    <property name="LOG_PATTERN"
+              value="${log.pattern:-%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n}" />
+
+    <!-- Max size of the log file before rolling over. Default is 10MB -->
+    <property name="MAX_FILE_SIZE" value="${log.max-size-mb:-10}MB" />
+
+    <!-- Maximum number of backup log files to retain. Default is 5 -->
+    <!-- <property name="MAX_BACKUPS" value="${log.max-backups:-5}" /> -->
+    <property name="MAX_BACKUPS" value="2" />
+
+    <!-- ========== MAIN ROLLING FILE APPENDER ========== -->
+    <!-- This appender writes logs to a file and rolls it over once it exceeds the defined size -->
+
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <!-- Full path to the current active log file -->
+        <file>${LOG_PATH}/${LOG_FILE_NAME}</file>
+
+        <!--
+          Rolling Policy: FixedWindowRollingPolicy
+          - Rolls log files when the size exceeds MAX_FILE_SIZE
+          - Creates compressed backups like: app.log.1.gz, app.log.2.gz, etc.
+          - Only creates backups when needed (not all at once)
+        -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%i.gz</fileNamePattern>
+            <minIndex>1</minIndex>              <!-- Start index for backup file naming -->
+            <maxIndex>${MAX_BACKUPS}</maxIndex> <!-- Max number of rolled backups to retain -->
+        </rollingPolicy>
+
+        <!--
+          Triggering Policy: SizeBasedTriggeringPolicy
+          - Rolls over the log file when it exceeds MAX_FILE_SIZE
+          - Works with the rolling policy to manage file rotation
+        -->
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+        </triggeringPolicy>
+
+        <!--
+          Encoder: Defines how each log message is formatted
+          Pattern uses the configured LOG_PATTERN, or defaults to a readable format
+        -->
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ========== ROOT LOGGER ========== -->
+    <!-- Applies to all loggers in the application -->
+
+    <root level="INFO">
+        <appender-ref ref="ROLLING" />
+    </root>
+
+</configuration>
