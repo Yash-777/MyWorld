@@ -5,7 +5,21 @@
     <artifactId>myworld</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
+  
   <artifactId>myworld-security</artifactId>
   <name>Security</name>
   <description>Handles authentication, authorization, and security logic.</description>
+  
+  <dependencies>
+  
+  <!-- Setting up Spring Security in a separate module is a great way to modularize your application and separate concerns. -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+  </dependencies>
 </project>

@@ -46,6 +46,11 @@ myapp-parent/
 		<artifactId>myworld-service</artifactId>
 		<version>${myapp.version}</version>
 	</dependency>
+	<dependency>
+		<groupId>${myapp.groupId}</groupId>
+		<artifactId>myworld-security</artifactId>
+		<version>${myapp.version}</version>
+	</dependency>
 	
 	<!-- Other dependencies -->
 	<dependency>
