@@ -21,7 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig_HttpBasic_FormLogin {
 	static boolean isHttpBasicSecurity = true;
 	static boolean isBCryptPasswordEncoder = true;
 	
