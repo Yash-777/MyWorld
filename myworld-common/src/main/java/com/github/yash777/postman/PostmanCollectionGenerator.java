@@ -1,4 +1,4 @@
-package com.github.yash777.myworld.postman;
+package com.github.yash777.postman;
 
 import java.io.*;
 import java.util.*;
@@ -7,7 +7,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
-import com.github.yash777.myworld.common.SystemEnvUtil;
+import com.github.yash777.commons.lang.SystemEnvUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
