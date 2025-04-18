@@ -63,5 +63,12 @@ myapp-parent/
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-actuator</artifactId>
 	</dependency>
+	
+	
+	<!-- Spring AOP (Aspect-Oriented Programming) allows you to modularize cross-cutting concerns—like logging, security, or transactions—separately from your core business logic.  -->
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-aspects</artifactId>
+	</dependency>
   </dependencies>
 </project>
