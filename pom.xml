@@ -49,6 +49,9 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		
 		<lombok.version>1.18.30</lombok.version>
+		<apache.commons.collections4>4.4</apache.commons.collections4>
+		<apache.commons.csv>1.13.0</apache.commons.csv>
+		<google.code.gson>2.12.1</google.code.gson>
 	</properties>
 		
 	<modules>
@@ -77,6 +80,24 @@
 		        <artifactId>lombok</artifactId>
 		        <version>${lombok.version}</version>
 		    </dependency>
+		    
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-collections4</artifactId>
+				<version>${apache.commons.collections4}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-csv</artifactId>
+				<version>${apache.commons.csv}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>${google.code.gson}</version>
+			</dependency>
 	    </dependencies>
 	</dependencyManagement>
 	
