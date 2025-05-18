@@ -1,4 +1,4 @@
-package com.github.yash777.myworld.api;
+package com.github.yash777.myworld.api.swagger;
 
 import java.io.IOException;
 
