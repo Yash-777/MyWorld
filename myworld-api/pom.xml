@@ -70,5 +70,12 @@ myapp-parent/
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-aspects</artifactId>
 	</dependency>
+	
+	<!-- Use springdoc-openapi (recommended for Spring Boot 2+) -->
+	<dependency>
+		<groupId>org.springdoc</groupId>
+		<artifactId>springdoc-openapi-ui</artifactId>
+		<version>1.7.0</version>
+	</dependency>
   </dependencies>
 </project>
