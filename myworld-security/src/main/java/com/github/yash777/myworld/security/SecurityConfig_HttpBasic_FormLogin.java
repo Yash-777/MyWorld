@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -46,9 +48,31 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig_HttpBasic_FormLogin {
-	static boolean isHttpBasicSecurity = true;
+	static boolean isHttpBasicSecurity = false; // FormLogin
 	static boolean isBCryptPasswordEncoder = true;
 	
+	/**
+	 * Indicates whether a custom HTML login page is used instead of Spring Security's default.
+	 * Set to true only if you have your own login UI (e.g., mylogin.html).
+	 */
+	static boolean isCustomFormLogin = true;
+	
+	/**
+	 * Path to the custom login page (GET handler).
+	 * This should match the actual URL where your custom HTML login page is served.
+	 *
+	 * Example: src/main/resources/static/public/mylogin.html
+	 * URL: http://localhost:8080/myworld/public/mylogin.html
+	 */
+	static String myLoginCustomUI_GET = "/public/mylogin.html";
+	
+	/**
+	 * Path that handles the login form submission (POST handler).
+	 * This must match the `action` attribute in your login HTML form.
+	 *
+	 * This is processed internally by Spring Security.
+	 */
+	static String myLoginPath_POSThandler = "/myloginpost";
 	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 	/**
 	 * Constructor-based injection for custom authentication entry point.
@@ -108,9 +132,16 @@ public class SecurityConfig_HttpBasic_FormLogin {
 		//org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration
 		//.antMatchers().permitAll().anyRequest().authenticated() IllegalStateException: Can't configure antMatchers after anyRequest
 		http.authorizeHttpRequests( (authorizeRequests) -> authorizeRequests
-				.antMatchers("/login", "/logout", "/public/**").permitAll() // ⬅️ allow login without auth, exclude context-path=/myworld
-				.antMatchers("/slf4j/**").permitAll()  // Allow direct access
-				//.antMatchers("/myworld/slf4j/**").permitAll()  // exclude context-path to Allow direct access
+				// Allow public access to login page and static resources
+				.antMatchers("/public/**", "/css/**", "/js/**", "/images/**").permitAll() // ⬅️ allow login without auth, exclude context-path=/myworld
+				.antMatchers(myLoginPath_POSThandler, "/logout").permitAll() // ⬅️ allow login without auth, exclude context-path=/myworld
+				.antMatchers("/slf4j/**").permitAll()  // Allow direct access - // exclude context-path to Allow direct access
+				
+				// http://localhost:8080/myworld/swagger-ui.html -> {"error":"You are not authorized to access this resource."}
+				// http://localhost:8080/myworld/swagger-ui/index.html - Swagger UI
+				.antMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()
+				
+				// All other endpoints require authentication
 				.anyRequest().authenticated()          // Everything else requires authentication
 				);
 		
@@ -119,41 +150,118 @@ public class SecurityConfig_HttpBasic_FormLogin {
 			http.httpBasic();
 			//http.httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(customAuthenticationEntryPoint));
 		} else { // FormLoginSecurityConfig Default Login Page for username/password - http://localhost:8080/myworld/login
-			http.formLogin() // ✅ this alone enables default login page
-			//🔥 Important: DO NOT set .loginPage(...) unless you serve an HTML custom login page yourself.
-			//.loginPage("/custom/loginpage") // ⬅️ only if you're serving a login page (optional)
-			.loginProcessingUrl("/login") // exclude context-path=/myworld
+			// ✅ Enables default login page and allows browser access
+			FormLoginConfigurer<HttpSecurity> formLogin = http.formLogin();
+			
+			processFormLogin(formLogin);
+			
+			formLogin
 			.successHandler((request, response, authentication) -> {
 				response.setStatus(HttpServletResponse.SC_OK);
 				response.setContentType("application/json");
+				
 				response.getWriter().write("{\"message\": \"Login successful\"}");
 			})
 			.failureHandler((request, response, exception) -> {
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				response.setContentType("application/json");
 				response.getWriter().write("{\"error\": \"Login failed\"}");
-			})
-			.and()
-			.logout()
+			});
+			
+			LogoutConfigurer<HttpSecurity> logout = http.logout();
+			logout.permitAll() // Allow everyone to access the logout page
 			.logoutUrl("/logout") // exclude context-path=/myworld
 			.logoutSuccessHandler((request, response, authentication) -> {
 				response.setStatus(HttpServletResponse.SC_OK);
 				response.setContentType("application/json");
 				response.getWriter().write("{\"message\": \"Logout successful\"}");
-			});
+			})
 			;
 		}
 		
-		// Global handler for unauthenticated requests
+		// 🔐 Configure Spring Security to use a custom AuthenticationEntryPoint
+		// This overrides the default login page redirect behavior and delegates handling
+		// of unauthorized (401) access attempts to `CustomAuthenticationEntryPoint`.
+		// For REST clients, this typically returns JSON; for browser clients, it can redirect to a login page.
 		http.exceptionHandling(configurer ->
-		configurer.authenticationEntryPoint(customAuthenticationEntryPoint)
+			configurer.authenticationEntryPoint(customAuthenticationEntryPoint)
 				);
 		
-		// Disable CSRF for stateless API use cases
-		http.csrf().disable(); // For REST APIs, CSRF can be disabled
+		// CSRF protection: allow login POST without CSRF for tools like Postman [403-Forbidden - ✅ Postman logins via /login POST (API-style)]
+		// 🔒 Important: Never disable CSRF in production without understanding the risks.
+		//http.csrf().disable(); // For REST APIs, CSRF can be disabled
+		http.csrf().ignoringAntMatchers(myLoginPath_POSThandler);
 		
 		return http.build();
 	}
+	
+	/**
+	 * Configures Spring Security's form login mechanism based on whether a custom login UI is used.
+	 * This method enables either Spring Security's default login page or a custom HTML login form,
+	 * and sets up the login POST handler accordingly.
+	 *
+	 * <p><strong>🚀 Custom Login Setup (Optional):</strong></p>
+	 * <ul>
+	 *   <li>If you're using a custom login page (e.g., {@code mylogin.html}), configure both:</li>
+	 *   <ul>
+	 *     <li>{@code .loginPage("/public/mylogin.html")} — path to the custom login UI</li>
+	 *     <li>{@code .loginProcessingUrl("/myloginpost")} — form action for login POST</li>
+	 *   </ul>
+	 *   <li>Otherwise, Spring Security will show its default login page and handle POST at {@code /login}</li>
+	 * </ul>
+	 *
+	 * <p><strong>📁 File Placement:</strong></p>
+	 * <ul>
+	 *   <li>Place {@code mylogin.html} inside: <code>src/main/resources/static/public/mylogin.html</code></li>
+	 *   <li>This ensures Spring Boot serves the file as a static asset at <code>/public/mylogin.html</code></li>
+	 * </ul>
+	 *
+	 * <p><strong>🔓 Static Resource Access Configuration:</strong></p>
+	 * <ul>
+	 *   <li>Permit access to static and public files in your Security config:</li>
+	 *   <pre>
+	 *   .antMatchers("/public/**", "/css/**", "/js/**", "/images/**").permitAll()
+	 *   </pre>
+	 * </ul>
+	 *
+	 * <p><strong>🐞 Common Redirect Errors (Explained):</strong></p>
+	 * <ul>
+	 *   <li>{@code SessionManagementFilter: Request requested invalid session id ...}</li>
+	 *   <li>{@code HttpSessionRequestCache: Saved request http://localhost:8080/myworld/sample/text}</li>
+	 *   <li>{@code DefaultRedirectStrategy: Redirecting to /myworld/public/mylogin.html}</li>
+	 *   <li>This typically happens when the session expires or an unauthenticated user accesses a protected page.</li>
+	 * </ul>
+	 *
+	 * <p><strong>🔧 Notes on Custom Form:</strong></p>
+	 * <ul>
+	 *   <li>In your HTML form, make sure:</li>
+	 *   <ul>
+	 *     <li>{@code <form action="/myloginpost" method="post">}</li>
+	 *     <li>This path must match {@code .loginProcessingUrl("/myloginpost")}</li>
+	 *   </ul>
+	 *   <li>When the login button is clicked, Spring will handle the POST request:</li>
+	 *   <pre>
+	 *   POST http://localhost:8080/myworld/myloginpost
+	 *   </pre>
+	 * </ul>
+	 *
+	 * @param formLogin the FormLoginConfigurer to configure login behavior
+	 */
+	private void processFormLogin(FormLoginConfigurer<HttpSecurity> formLogin) {
+		if (isCustomFormLogin) {
+			// ✅ Set the GET endpoint for the login page (served by Spring Boot as a static file)
+			//🔥 Important: DO NOT set .loginPage(...) unless you serve an HTML custom login page yourself.
+			formLogin.loginPage(myLoginCustomUI_GET); // ⬅️ only if you're serving a login page (optional)
+		}
+		//http.formLogin(withDefaults()); ✅ Only works in Spring Security 6+ (i.e., Spring Boot 3+)
+		
+		// ✅ POST endpoint for login form submission : This must match the `action="/myloginpost"` in your HTML login form
+		formLogin.loginProcessingUrl(myLoginPath_POSThandler); // exclude context-path=/myworld
+		
+		// ✅ Allow everyone to access the login page and login POST handler
+		formLogin.permitAll();
+	}
+	
 	
 	
 	/**
