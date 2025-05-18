@@ -139,7 +139,7 @@ public class SecurityConfig_HttpBasic_FormLogin {
 				
 				// http://localhost:8080/myworld/swagger-ui.html -> {"error":"You are not authorized to access this resource."}
 				// http://localhost:8080/myworld/swagger-ui/index.html - Swagger UI
-				.antMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()
+				.antMatchers("/swagger-ui/**","/v3/api-docs/**", "/webjars/**", "/swagger-resources/**").permitAll()
 				
 				// All other endpoints require authentication
 				.anyRequest().authenticated()          // Everything else requires authentication
@@ -161,11 +161,21 @@ public class SecurityConfig_HttpBasic_FormLogin {
 				response.setContentType("application/json");
 				
 				response.getWriter().write("{\"message\": \"Login successful\"}");
+				
+				if (!customAuthenticationEntryPoint.isRestClient(request)) {
+					// 🔁 Redirect for browser clients (Swagger UI:http://localhost:8080/myworld/swagger-ui/index.html)
+					response.sendRedirect(request.getContextPath() + "/swagger-ui/index.html");
+				}
 			})
 			.failureHandler((request, response, exception) -> {
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				response.setContentType("application/json");
 				response.getWriter().write("{\"error\": \"Login failed\"}");
+				
+				if (!customAuthenticationEntryPoint.isRestClient(request)) {
+					// 🔁 Redirect for browser clients (Logout Page)
+					response.sendRedirect(request.getContextPath() + "/public/mylogout.html");
+				}
 			});
 			
 			LogoutConfigurer<HttpSecurity> logout = http.logout();

@@ -4,6 +4,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -87,15 +88,25 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 		
 		String acceptHeader = request.getHeader("Accept");
 		String xhrHeader = request.getHeader("X-Requested-With");
-		String userAgent = request.getHeader("User-Agent");
+		String swaggerReferer = request.getHeader("referer");
+		System.out.println("swaggerReferer :"+swaggerReferer);
+		String requestURI = request.getRequestURI();
+		System.out.println("requestURI :"+requestURI);
 		
-		boolean isApiRequest =
+		Cookie[] cookies = request.getCookies();
+		for (Cookie cookie : cookies) {
+			System.out.println("Cookie Name:"+ cookie.getName() +", Value:"+cookie.getValue());
+		}
+		boolean isSwaggerRequest = requestURI != null && (requestURI.contains("/swagger-ui") || requestURI.contains("/v3/api-docs")); // Swagger UI/API calls
+		// Detect API or Swagger requests (i.e., non-browser use cases)
+		boolean isApiRequest = isSwaggerRequest ||
+				(swaggerReferer != null && swaggerReferer.contains("/swagger-ui/index.html")) || // http://localhost:8080/myworld/swagger-ui/index.html
 				(acceptHeader != null && acceptHeader.contains("application/json")) ||
 				(xhrHeader != null && "XMLHttpRequest".equalsIgnoreCase(xhrHeader)) ||
-				(userAgent != null && isRestClient(userAgent));
+				(isRestClient(request));
 		
 		if (isApiRequest) {
-			// 🔧 JSON response for REST clients(APIs or AJAX)
+			// 🔧 JSON response for REST clients(APIs or AJAX) or Swagger
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
 			response.setContentType("application/json");
 			response.getWriter().write("{ \"error\": \"You are not authorized to access this resource.\" }");
@@ -124,19 +135,21 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 	 *   <li>{@code Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/119.0.0}</li>
 	 * </ul>
 	 *
-	 * @param userAgent the User-Agent header string from the request
+	 * @param request the incoming HTTP request
 	 * @return true if the User-Agent appears to be a REST client, false if it's likely a browser
 	 */
-	private boolean isRestClient(String userAgent) {
-	    if (userAgent == null) return false;
-
-	    userAgent = userAgent.toLowerCase();
-
-	    return userAgent.contains("postman") ||
-	           userAgent.contains("curl") ||
-	           userAgent.contains("httpclient") ||
-	           userAgent.contains("java") ||      // Apache HttpClient
-	           userAgent.contains("okhttp");      // Android REST clients
+	public boolean isRestClient(HttpServletRequest request) {
+		//User-Agent header string from the request
+		String userAgent = request.getHeader("User-Agent");
+		if (userAgent == null) return false;
+		
+		userAgent = userAgent.toLowerCase();
+		
+		return userAgent.contains("postman") || userAgent.contains("PostmanRuntime") ||
+				userAgent.contains("curl") ||
+				userAgent.contains("httpclient") || userAgent.contains("HttpClient") ||
+				userAgent.contains("java") ||      // Apache HttpClient
+				userAgent.contains("okhttp");      // Android REST clients
 	}
 
 }
