@@ -1,4 +1,4 @@
-package com.github.yash777;
+package com.github.yash777.commons.file;
 
 import java.net.URL;
 import java.util.LinkedHashMap;
@@ -20,18 +20,18 @@ import java.util.Map;
  * <h3>Example Usage:</h3>
  * <pre>{@code
  * // Check where a class is loaded from
- * String location = FindClassBelongsToJar.findJarFile(String.class);
+ * String location = FindClassFileBelongsToJar.findJarFile(String.class);
  * System.out.println("Class Location: " + location);
  *
  * // Get Maven-specific path info if available
- * Map<String, String> details = FindClassBelongsToJar.findJarDetails(StringUtils.class);
+ * Map<String, String> details = FindClassFileBelongsToJar.findJarDetails(StringUtils.class);
  * details.forEach((k, v) -> System.out.println(k + ": " + v));
  * }</pre>
  *
  * @author 🔐 Yash
  * @since 1.0
  */
-public class FindClassBelongsToJar {
+public class FindClassFileBelongsToJar {
 	
 	/**
 	 * Entry point to demonstrate how the utility works with a few well-known classes.

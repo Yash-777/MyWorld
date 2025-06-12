@@ -57,6 +57,8 @@ Once the user is logged in via the form, Swagger UI uses the existing session co
             on success Redirects to <a href="/swagger-ui/index.html">🔁 Swagger UI</a>
             <li> Access an <a href="/myworld/public/mylogin.html">👉 Unauthorized resource</a> which redirects to Login Page.
             </ul>
+            <br/>
+            Spring Boot Actuator: Production-ready features <a href="/myworld/actuator">👉 /actuator</a>
             """
     ),
     servers = { // Include context-path=/myworld

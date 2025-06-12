@@ -344,4 +344,14 @@ public final class AesCryptoManager {
 		}
 		
 	}
+	
+	@SuppressWarnings("unused")
+	private void unUsedMethod() {
+		
+	}
+	
+	@SuppressWarnings("unused")
+	static private class InnerSubClass {
+		
+	}
 }

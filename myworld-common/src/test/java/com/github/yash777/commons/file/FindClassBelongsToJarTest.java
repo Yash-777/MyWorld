@@ -1,5 +1,5 @@
 
-package com.github.yash777;
+package com.github.yash777.commons.file;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,7 +13,7 @@ public class FindClassBelongsToJarTest {
 	@Test
 	@DisplayName("Should return a valid URL for JDK class")
 	void testFindJarFileForJDKClass() {
-		String result = FindClassBelongsToJar.findJarFile(String.class);
+		String result = FindClassFileBelongsToJar.findJarFile(String.class);
 		assertNotNull(result);
 		assertTrue(result.contains("java/lang/String.class") || result.contains("jrt:/"));
 	}
@@ -21,13 +21,13 @@ public class FindClassBelongsToJarTest {
 	@Test
 	@DisplayName("Should throw exception for null input")
 	void testFindJarFileWithNull() {
-		assertThrows(IllegalArgumentException.class, () -> FindClassBelongsToJar.findJarFile(null));
+		assertThrows(IllegalArgumentException.class, () -> FindClassFileBelongsToJar.findJarFile(null));
 	}
 	
 	@Test
 	@DisplayName("Should extract Maven details for third-party class")
 	void testFindJarDetailsForApacheClass() {
-		Map<String, String> details = FindClassBelongsToJar.findJarDetails(org.apache.commons.lang3.StringUtils.class);
+		Map<String, String> details = FindClassFileBelongsToJar.findJarDetails(org.apache.commons.lang3.StringUtils.class);
 		assertNotNull(details);
 		assertTrue(details.get("Class Location") != null);
 	}
@@ -35,7 +35,7 @@ public class FindClassBelongsToJarTest {
 	@Test
 	@DisplayName("Should fallback for non-Maven class (JDK)")
 	void testFindJarDetailsForJDKClass() {
-		Map<String, String> details = FindClassBelongsToJar.findJarDetails(String.class);
+		Map<String, String> details = FindClassFileBelongsToJar.findJarDetails(String.class);
 		assertNotNull(details);
 		assertTrue(details.get("Class Location").contains("java/lang/String.class") || details.get("Class Location").contains("jrt:/"));
 	}
@@ -43,6 +43,6 @@ public class FindClassBelongsToJarTest {
 	@Test
 	@DisplayName("Should throw exception for null in detailed method")
 	void testFindJarDetailsWithNull() {
-		assertThrows(IllegalArgumentException.class, () -> FindClassBelongsToJar.findJarDetails(null));
+		assertThrows(IllegalArgumentException.class, () -> FindClassFileBelongsToJar.findJarDetails(null));
 	}
 }
