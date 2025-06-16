@@ -50,16 +50,16 @@ Once the user is logged in via the form, Swagger UI uses the existing session co
         title = "My World API",
         version = "1.0",
         description = """
-            My World OpenAPI Documentation.
+        📘 My World API Documentation.
 
-            <ul>🔐 Note: To access secured endpoints.
-            <li> Click here to access <a href="/myworld/public/mylogin.html"> 👉 Login Page</a> 
-            on success Redirects to <a href="/swagger-ui/index.html">🔁 Swagger UI</a>
-            <li> Access an <a href="/myworld/public/mylogin.html">👉 Unauthorized resource</a> which redirects to Login Page.
-            </ul>
-            <br/>
-            Spring Boot Actuator: Production-ready features <a href="/myworld/actuator">👉 /actuator</a>
-            """
+        <ul>🔐 Note: To access secured endpoints.
+        <li> Click here to access <a href="/myworld/public/mylogin.html"> 👉 Login Page</a> 
+        on success Redirects to <a href="/myworld/swagger-ui/index.html">🔁 Swagger UI</a>
+        <li>To access Swagger UI URLs in doc style of metadata, OpenAPI Specs (YAML/JSON) of all services: 
+        <a href="/myworld/v3/api-docs">JSON 🧾 /v3/api-docs</a>, <a href="/myworld/v3/api-docs.yaml">YAML 🧾 /v3/api-docs.yaml</a>
+        <li> Access an <a href="/myworld/public/mylogin.html">🌐 Unauthorized resource</a> which redirects to Login Page.
+        </ul>
+        """
     ),
     servers = { // Include context-path=/myworld
         @Server(url = "http://localhost:8080/myworld", description = "Local server"),
