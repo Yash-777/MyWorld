@@ -97,12 +97,12 @@ public class CipherKeyEncryptDecrypt {
 	static String KEY_PATH = "D:/security/SecretPasswordKey.key";
 	static String ENCRYPT_PASS_1 = "AW'X;hNxK7^VpogH#tXr(p1hT?!1L;)La.s6tc$T@NO%\"Fh,jN%dey5'PqBz6/9?";
 	static String ENCRYPT_PASS_2 = "U,XXx:LO2Lk,^tqA%Ei=#1*Z,FVsEDV68M>>M$A1w3_ST?:|fnDCe&<#q1zvY'&i";
-	static String ENCRYPT_PASS_DB = "B&^0QUV^?^SQ.{D|]C[[(+hm'^e7|FJ}Ga-4$T54:(bgpyD,)K{fpE8~M,YMzvu";
+	public static String ENCRYPT_PASS_DB = "B&^0QUV^?^SQ.{D|]C[[(+hm'^e7|FJ}Ga-4$T54:(bgpyD,)K{fpE8~M,YMzvu";
 	
 	static String UTF_8 = "UTF-8";
 	static int SALT_SIZE = 24;
 	
-	static String secretPasswordKey;
+	public static String secretPasswordKey;
 	static void setSecretPasswordKey() {
 		String generatedPassword = generateRandomPassword(PASSWORD_LENGTH);
 		System.out.println("Generated secretKeyPassword: " + generatedPassword);
