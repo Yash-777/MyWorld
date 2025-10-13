@@ -7,6 +7,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +18,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * ✅ XML Validator API
@@ -46,8 +48,9 @@ import io.swagger.v3.oas.annotations.Parameter;
  * 
  * @author 🔐 yashwanth
 */
+@Tag(name = "Online Module", description = "Online Module APIs for JSON, XML, Text")
 @RestController
-@RequestMapping("/xml")
+@RequestMapping("/online/xmlapi")
 public class XmlValidatorController {
 	
 	/**
@@ -56,7 +59,8 @@ public class XmlValidatorController {
 	 * @param xmlInput The XML content as string
 	 * @return Compact XML string or error message
 	 */
-	@PostMapping("/validate")
+	@PostMapping("/validate") // http.csrf().disable(); → For REST APIs, CSRF can be disabled
+	//@GetMapping("/validate")
 	public String validateXml(
 			@Parameter(description = "XML input", example = """
 			<user>

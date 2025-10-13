@@ -1,6 +1,8 @@
 package com.github.yash777.myworld.api.online;
 
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -32,8 +34,9 @@ import java.util.Map;
  * 
  * @author 🔐 Yashwanth
  */
+@Tag(name = "Online Module", description = "Online Module APIs for JSON, XML, Text")
 @RestController
-@RequestMapping("/text")
+@RequestMapping("/online/text")
 public class TextAnalysisController {
 	
 	/**

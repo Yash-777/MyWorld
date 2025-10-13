@@ -1,5 +1,6 @@
 package com.github.yash777.myworld.api.online;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * 
@@ -40,8 +42,9 @@ import io.swagger.v3.oas.annotations.Parameter;
  * 
  * @author 🔐 Yashwanth
  */
+@Tag(name = "Online Module", description = "Online Module APIs for JSON, XML, Text")
 @RestController
-@RequestMapping("/json")
+@RequestMapping("/online/jsonapi")
 public class JsonValidatorController {
 	
 	private final ObjectMapper objectMapper;
@@ -59,7 +62,8 @@ public class JsonValidatorController {
 	 * @param jsonInput The input JSON string
 	 * @return Compact JSON or error message
 	 */
-	@PostMapping("/validate")
+	@PostMapping("/validate") // http.csrf().disable(); → For REST APIs, CSRF can be disabled
+	//@GetMapping("/validate")
 	public String validateJson(
 			@Parameter(description = "Raw JSON string", example = """
 			{

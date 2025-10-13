@@ -197,10 +197,13 @@ public class SecurityConfig_HttpBasic_FormLogin {
 			configurer.authenticationEntryPoint(customAuthenticationEntryPoint)
 				);
 		
-		// CSRF protection: allow login POST without CSRF for tools like Postman [403-Forbidden - ✅ Postman logins via /login POST (API-style)]
 		// 🔒 Important: Never disable CSRF in production without understanding the risks.
-		//http.csrf().disable(); // For REST APIs, CSRF can be disabled
-		http.csrf().ignoringAntMatchers(myLoginPath_POSThandler);
+		// CSRF protection: allow login POST without CSRF for tools like Postman [403-Forbidden - ✅ Postman logins via /login POST (API-style)]
+		http.csrf().disable(); // Disable CSRF entirely (not recommended unless you have stateless REST APIs) 
+		// Use only when: You use JWT tokens or sessionless authentication. (or) Your clients are not web browsers.
+		//By default, Spring Security enables CSRF protection for all state-changing HTTP methods (POST, PUT, PATCH, DELETE).
+		//You told Spring Security to ignore CSRF only for your custom login POST URL:
+		//http.csrf().ignoringAntMatchers(myLoginPath_POSThandler); // ✅ /myloginpost (login) → works without CSRF token (needed for Postman / API login)
 		
 		return http.build();
 	}
