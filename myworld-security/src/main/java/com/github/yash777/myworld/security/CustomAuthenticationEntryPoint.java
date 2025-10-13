@@ -39,14 +39,6 @@ import java.io.IOException;
  * @author Yash
  * @since 1.0
  */
-/**
- * @author srika
- *
- */
-/**
- * @author srika
- *
- */
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	
