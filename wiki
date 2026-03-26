@@ -1,0 +1,91 @@
+🔐 Requires authentication (e.g., <code>admin:admin123</code>)
+
+https://auth.openai.com/log-in-or-create-account
+
+http://localhost:8080/myworld/public/mylogin.html
+http://localhost:8080/myworld/swagger-ui/index.html#/
+
+When Swagger (now part of the OpenAPI Specification) shows GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS methods for a single endpoint, it's usually because of one of these common misconfigurations:
+	@RequestMapping("/generate/customChars") // ❌ This will create entries for all HTTP verbs:
+	If you use @RequestMapping("/path") without specifying method, Swagger treats it as supporting all HTTP methods.
+	@RequestMapping(method = RequestMethod.GET, value = "/generate/customChars")
+	or use
+	@GetMapping("/generate")
+	
+===================================================================================================
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/C:/Users/ymerugu/.m2/repository/org/apache/logging/log4j/log4j-slf4j-impl/2.17.2/log4j-slf4j-impl-2.17.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/C:/Users/ymerugu/.m2/repository/ch/qos/logback/logback-classic/1.2.12/logback-classic-1.2.12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Exception in thread "main" java.lang.ExceptionInInitializerError
+	at com.github.yash777.myworld.api.MyApplication.main(MyApplication.java:62)
+Caused by: org.apache.logging.log4j.LoggingException: log4j-slf4j-impl cannot be present with log4j-to-slf4j
+	at org.apache.logging.slf4j.Log4jLoggerFactory.validateContext(Log4jLoggerFactory.java:60)
+	at org.apache.logging.slf4j.Log4jLoggerFactory.newLogger(Log4jLoggerFactory.java:44)
+	at org.apache.logging.slf4j.Log4jLoggerFactory.newLogger(Log4jLoggerFactory.java:33)
+	at org.apache.logging.log4j.spi.AbstractLoggerAdapter.getLogger(AbstractLoggerAdapter.java:53)
+	at org.apache.logging.slf4j.Log4jLoggerFactory.getLogger(Log4jLoggerFactory.java:33)
+	at org.slf4j.LoggerFactory.getLogger(LoggerFactory.java:363)
+	at org.apache.commons.logging.LogAdapter$Slf4jAdapter.createLocationAwareLog(LogAdapter.java:130)
+	at org.apache.commons.logging.LogAdapter.createLog(LogAdapter.java:91)
+	at org.apache.commons.logging.LogFactoryService.getInstance(LogFactoryService.java:46)
+	at org.apache.commons.logging.LogFactoryService.getInstance(LogFactoryService.java:41)
+	at org.apache.commons.logging.LogFactory.getLog(LogFactory.java:920)
+	at org.springframework.boot.SpringApplication.<clinit>(SpringApplication.java:179)
+	... 1 more
+
+
+	/**
+	 * Create an actual {@link Log} instance for the selected API.
+	 * @param name the logger name
+	 */
+	public static Log createLog(String name) {
+		switch (logApi) {
+			case LOG4J:
+				return Log4jAdapter.createLog(name);
+			case SLF4J_LAL:
+				return Slf4jAdapter.createLocationAwareLog(name);
+			case SLF4J:
+				return Slf4jAdapter.createLog(name);
+			default:
+				return JavaUtilAdapter.createLog(name);
+		}
+	}
+	
+	
+<!--
+Caused by: org.apache.logging.log4j.LoggingException: log4j-slf4j-impl cannot be present with log4j-to-slf4j
+
+<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+<exclusions>
+
+    <exclusion>
+    	<groupId>org.apache.logging.log4j</groupId>
+    	<artifactId>log4j-api</artifactId>
+    </exclusion>
+</exclusions>
+
+<exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+        
+            <exclusion>
+    	<groupId>org.apache.logging.log4j</groupId>
+    	<artifactId>log4j-to-slf4j</artifactId>
+    </exclusion>
+    </exclusions>
+<dependency> ch.qos.logback.classic.Logger
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-log4j2</artifactId>
+</dependency>-->
+===================================================================================================
+	
+Avoid using the @PreAuthorize annotation on the method that handles password reset via the 'Forgot Password' link.
