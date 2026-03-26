@@ -51,8 +51,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  * @author Yash
  */
-@Component
-@Aspect @Order(1) // This aspect executes before others with a higher order
+//@Component
+//@Aspect @Order(1) // This aspect executes before others with a higher order
 @org.springframework.context.annotation.EnableAspectJAutoProxy
 // If you're using @Aspect in any Spring AOP configuration or annotation-driven approach (@EnableAspectJAutoProxy), then AspectJ runtime must be available in the module's classpath.
 public class RequestLoggingAspect {

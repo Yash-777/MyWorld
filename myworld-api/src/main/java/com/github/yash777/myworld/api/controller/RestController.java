@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.github.yash777.myworld.aspects.custom.annotation.LogExecutionTime;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -29,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @org.springframework.web.bind.annotation.RestController //spring-boot-starter-web
 @org.springframework.web.bind.annotation.RequestMapping(value = "/sample")
 @Slf4j
+@LogExecutionTime
 public class RestController {
     public RestController() {
         log.info("🚧 RestController constructor: Before @Autowired and properties are set");

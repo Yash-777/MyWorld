@@ -34,8 +34,8 @@ HTTP Request Thread:
  * @author Yash
  *
  */
-@Aspect @Order(2) // Executes after EndpointTimeAspect
-@Component
+//@Aspect @Order(2) // Executes after EndpointTimeAspect
+//@Component
 public class AroundMethodAspect {
 	private static final Logger logger = LoggerFactory.getLogger(AroundMethodAspect.class);
 	

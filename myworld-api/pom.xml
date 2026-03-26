@@ -52,19 +52,44 @@ myapp-parent/
 		<version>${myapp.version}</version>
 	</dependency>
 	
+	<!--<dependency>
+		<groupId>${myapp.groupId}</groupId>
+		<artifactId>myworld-db</artifactId>
+		<version>${myapp.version}</version>
+	</dependency>-->
+	
 	<!-- Other dependencies -->
 	<dependency>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-web</artifactId>
 	</dependency>
 	
-	<!-- Spring Boot Actuator: Production-ready features /actuator/health -->
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-actuator</artifactId>
-	</dependency>
-	
-	
+<!-- Spring Boot Actuator: Production-ready features /actuator/health  https://springdoc.org/modules.html -->
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+<!--This enables integration between Spring Boot Actuator and SpringDoc.-->
+<!--<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-actuator</artifactId>
+    <version>1.7.0</version>
+</dependency>-->
+<!-- SpringDoc OpenAPI to support Actuator https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui/1.7.0 -->
+<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-ui</artifactId>
+    <version>1.7.0</version>
+     <!-- Use latest 1.x version -->
+</dependency>
+<!-- Actuator integration for OpenAPI -->
+<!--<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-actuator</artifactId>
+    <version>1.7.0</version>
+</dependency>-->
+
+
 	<!-- Spring AOP (Aspect-Oriented Programming) allows you to modularize cross-cutting concerns—like logging, security, or transactions—separately from your core business logic.  -->
 	<dependency>
 		<groupId>org.springframework</groupId>
@@ -77,5 +102,16 @@ myapp-parent/
 		<artifactId>springdoc-openapi-ui</artifactId>
 		<version>1.7.0</version>
 	</dependency>
+	<!--Unable to render this definition
+The provided definition does not specify a valid version field.
+
+Please indicate a valid Swagger or OpenAPI version field. Supported version fields are swagger: "2.0" and those that match openapi: 3.0.n (for example, openapi: 3.0.0). -->
+	<!-- OpenAPI (Springdoc for Swagger UI) 
+<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    <version>2.3.0</version>
+</dependency> -->
+
   </dependencies>
 </project>

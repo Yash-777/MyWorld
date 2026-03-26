@@ -31,6 +31,13 @@ public class StringUtils {
 		System.out.println("capitalize(\"hello\"): " + capitalize("hello"));
 		System.out.println("repeat(\"*\", 5):      " + repeat("*", 5));
 		
+		String stt = " "; // https://stackoverflow.com/a/46118158/5081877
+		System.out.println(":"+stt.length()+":");
+		System.out.println("isEmpty() [@since 1.6]:" + stt.isEmpty());
+		System.out.println("isBlank() [@since  11]:" + stt.isBlank());
+		System.out.println("trim() .length() [@since  1]:" + stt.trim().length());
+		System.out.println("strip().length() [@since 11]:" + stt.strip().length());
+		
 		
 		System.out.println("\nreplaceSubstringInBetween():");
 		System.out.println(replaceSubstringInBetween("abcdef", "123", "b", "e")); // ab123ef

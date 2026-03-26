@@ -37,6 +37,9 @@ import lombok.Data;
 //@Slf4j
 @Data 
 public class CipherKeyEncryptDecrypt {
+	//static String dateFormat = "yyyy-MM-dd HH:mm:ss"; // 2023-12-29 10:09:34
+	static String dateFormat = "yyyy-MM-dd'T'HH:mm:ss"; // 2023-12-29T10:09:34
+
 	public static void main(String[] args) throws Exception {
 		System.out.println("Current JVM version - " + System.getProperty("java.version"));
 		
@@ -45,9 +48,9 @@ public class CipherKeyEncryptDecrypt {
 		secretPasswordKey = ENCRYPT_PASS_DB;
 		
 		String salt_UserName = "yash@gmail.com";
-		Date dateFrom = getDateFrom("2023-12-29 10:09:34");
+		Date dateFrom = getDateFrom("2023-12-29T10:09:34");
 		String raw_Password = "Yash@001";
-		String dbEncodeWithDate = "YWRtaW5AZHNwcm8uY29tMjAyMy0xMi0yOVQxMDowOUujxOjQ6K8UZpQ76Mgpd6Y=";
+		String dbEncodeWithDate = "eWFzaEBnbWFpbC5jb20yMDIzLTEyLTI5VDEwOjA5Nt3JMgbeAV/c9tk5sGrPuQ==";
 		
 		String encoded = obj.encode(raw_Password, salt_UserName, null);
 		System.out.println("encode : "+encoded);
@@ -55,8 +58,10 @@ public class CipherKeyEncryptDecrypt {
 		System.out.println("encodeWithDate : "+encodeWithDate);
 		String DBDoecodedPassDate = obj.decode(dbEncodeWithDate, salt_UserName, dateFrom);
 		System.out.println("DB DoecodedPassDate : "+DBDoecodedPassDate);
+		String DBDoecodedPassDate_DB = obj.decode(encodeWithDate, salt_UserName, dateFrom);
+		System.out.println("DB DoecodedPassDate DB : "+DBDoecodedPassDate_DB);
 		
-		obj.checkDefaultFlow();
+		//obj.checkDefaultFlow();
 	}
 	private void checkDefaultFlow() throws Exception {
 		String creationDate = "2023-12-29 10:09:34"; // yyyy-MM-dd HH:mm:ss
@@ -167,7 +172,6 @@ public class CipherKeyEncryptDecrypt {
 	}
 	
 	
-	static String dateFormat = "yyyy-MM-dd HH:mm:ss";
 	// Convert Date to String
 	public static String getStringFrom(Date enrollmentDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
@@ -223,7 +227,8 @@ public class CipherKeyEncryptDecrypt {
 		System.arraycopy(saltBytes, 0, buffer, 0, saltBytes.length);
 		System.arraycopy(ivBytes, 0, buffer, saltBytes.length, ivBytes.length);
 		System.arraycopy(encryptedTextBytes, 0, buffer, saltBytes.length + ivBytes.length, encryptedTextBytes.length);
-		return java.util.Base64.getEncoder().encodeToString(buffer);
+		//return java.util.Base64.getEncoder().encodeToString(buffer);
+		return new org.apache.commons.codec.binary.Base64().encodeToString(buffer);
 	}
 	
 	static String AES_ALGORITHM = "AES"; // SecretKeySpec - ALOG (AES)
