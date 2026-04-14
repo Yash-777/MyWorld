@@ -58,7 +58,7 @@ public class DataSourceConfig {
     
     @Bean @Primary
     @ConfigurationProperties(prefix = "app.datasource.myapp")
-    public DataSourceProperties dsproDataSourceProperties() {
+    public DataSourceProperties myappDataSourceProperties() {
         return new DataSourceProperties();
     }
     
@@ -86,7 +86,7 @@ public class DataSourceConfig {
  */
     @Bean(name = "dataSource") //@Primary
     public DataSource getHikariCP() {
-        System.out.println("Creating dsproDataSource Bean......................");
+        System.out.println("Creating DataSource Bean......................");
         HikariConfig hikariConfig = new HikariConfig();
         
         if (isHardCodedProps) {
@@ -117,7 +117,7 @@ public class DataSourceConfig {
         
         HikariDataSource dataSource = new HikariDataSource(hikariConfig);
         return dataSource;
-        // return dsproDataSourceProperties().initializeDataSourceBuilder().type(HikariDataSource.class).build();
+        // return myappDataSourceProperties().initializeDataSourceBuilder().type(HikariDataSource.class).build();
     }
     
     @Bean @Primary

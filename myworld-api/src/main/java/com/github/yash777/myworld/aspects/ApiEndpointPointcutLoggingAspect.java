@@ -18,7 +18,7 @@ public class ApiEndpointPointcutLoggingAspect {
 	@Value("${performance.logging.enabled:true}")
 	private boolean enabled;
 	
-	@Around("execution(* com.vorwerk.dspro.*..impl..*.*(..))")
+	@Around("execution(* com.github.yash777.*..impl..*.*(..))")
 	public Object logExecutionTime(final ProceedingJoinPoint joinPoint) throws Throwable {
 //		if (!EndpointTimeAspect.reqTriggered.get()) {
 //			return joinPoint.proceed(); // skip logic if not enabled

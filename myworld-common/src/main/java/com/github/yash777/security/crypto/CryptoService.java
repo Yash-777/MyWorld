@@ -3,9 +3,7 @@ package com.github.yash777.security.crypto;
 import java.security.AlgorithmParameters;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Base64;
 import java.util.Date;
-import java.util.Iterator;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -35,17 +33,24 @@ public class CryptoService {
 		Date dateFrom = getDateFrom(creationDate);
 		
 		CryptoService obj = new CryptoService();
-//		String UserName = "ymerugu@innominds.com", Password = "Yash@001";
-//		String UserName = "rbuyya@innominds.com", Password = "D$Pr^0@dm!n%)";
-//		String UserName = "sparupati@innominds.com", Password = "D$Pr^0@dm!n%)";
-		String UserName = "svallepu@innominds.com", Password = "D$Pr^0@dm!n%)";
+		String UserName = "Yash@gmail.com", Password = "Yash@001";
+		
+		CipherKeyEncryptDecrypt objUtil = new CipherKeyEncryptDecrypt();
+		CipherKeyEncryptDecrypt.secretPasswordKey = obj.key;
+		
 		for (int i=0; i<4; i++) {
-			//String encode = obj.encode("", "ymerugu@innominds.com", dateFrom);
+			//String encode = obj.encode("", "Yash@gmail.com", dateFrom);
 			String encode = obj.encode(Password, UserName, dateFrom);
-			System.out.println("encoded:"+encode);
+			System.out.println("encoded               :"+encode);
+			System.out.println("encoded with     date :"+ objUtil.encode(Password, UserName, dateFrom));
+			System.out.println("encoded with out date :"+ objUtil.encode(Password, UserName, null));
 			
 			String sql = "update User set password ='"+encode+"', CreatedDate = STR_TO_DATE('12/29/2023 10:09:34', '%m/%d/%Y %H:%i:%s') where emailId='"+UserName+"';";
 			System.out.println(sql);
+			
+			
+			String decode = objUtil.decode(encode, UserName, dateFrom);
+			System.out.println("decode:"+decode);
 		}
 		
 	}

@@ -88,13 +88,13 @@ public class ControllerLoggingAspect {
 //    @Around("execution(* com.github.yash777..*(..)) " +
 //    
 //			"&& !within(com.github.yash777.myworld.api..*) " +
-////            "&& !within(com.vorwerk.dspro.aspect.LoggingAspect) " +
-////    		"&& !within(com.vorwerk.dspro.aspect..*) " +
-//////            "&& !within(com.vorwerk.dspro.aop..*) " +
-////            "&& !within(com.vorwerk.dspro.plugin..*) " +
-////            "&& !within(com.vorwerk.dspro.audit..*) " +
-////            "&& !within(com.vorwerk.dspro.actor..*) " +
-////            "&& !within(com.vorwerk.dspro.security..*) " +
+////            "&& !within(com.github.yash777.aspect.LoggingAspect) " +
+////    		"&& !within(com.github.yash777.aspect..*) " +
+//////            "&& !within(com.github.yash777.aop..*) " +
+////            "&& !within(com.github.yash777.plugin..*) " +
+////            "&& !within(com.github.yash777.audit..*) " +
+////            "&& !within(com.github.yash777.actor..*) " +
+////            "&& !within(com.github.yash777.security..*) " +
 //            
 //            "&& !within(org.springframework.web.filter..*) " +
 //            "&& !within(javax.servlet..*)")

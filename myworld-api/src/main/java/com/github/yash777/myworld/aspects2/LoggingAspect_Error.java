@@ -87,8 +87,8 @@ java.lang.NullPointerException: Cannot invoke "org.apache.commons.logging.Log.is
     
     
     
-//    @Around("execution(* com.vorwerk.dspro..service..*(..)) || execution(* com.vorwerk.dspro..dao..*(..))")
-    @Around("execution(* com.vorwerk.dspro..*(..))")
+//    @Around("execution(* com.github.yash777..service..*(..)) || execution(* com.github.yash777..dao..*(..))")
+    @Around("execution(* com.github.yash777..*(..))")
     public Object captureInternalMethodCalls(ProceedingJoinPoint joinPoint) throws Throwable {
 
         // Only log if the current thread is handling a tracked request

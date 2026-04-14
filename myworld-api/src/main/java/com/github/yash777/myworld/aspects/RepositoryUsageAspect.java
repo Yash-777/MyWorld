@@ -14,10 +14,10 @@ public class RepositoryUsageAspect {
 	private static final Logger logger = LoggerFactory.getLogger(RepositoryUsageAspect.class);
 	
 	// The pointcut expression must be a compile-time constant expression (i.e., a hardcoded string)
-	static final String pointcutExpression = "execution(* com.vorwerk.dspro.configuration.repository.CompanyAuthenticationRepository.*(..))";
+	static final String pointcutExpression = "execution(* com.github.yash777.configuration.repository.CompanyAuthenticationRepository.*(..))";
 	@Around(pointcutExpression)
 		
-	//@Around("execution(* com.vorwerk.dspro.configuration.repository.CompanyAuthenticationRepository.*(..))")
+	//@Around("execution(* com.github.yash777.configuration.repository.CompanyAuthenticationRepository.*(..))")
 	public Object logRepositoryCallAndCaller(ProceedingJoinPoint pjp) throws Throwable {
 		long startTime = System.currentTimeMillis();
 		
@@ -31,7 +31,7 @@ public class RepositoryUsageAspect {
 		for (int i = 0; i < stackTrace.length; i++) {
 			StackTraceElement element = stackTrace[i];
 			// Skip framework/internal calls and stop at first external caller
-			if (element.getClassName().startsWith("com.vorwerk.dspro.") && !element.getClassName().contains("RepositoryUsageAspect")) {
+			if (element.getClassName().startsWith("com.github.yash777.") && !element.getClassName().contains("RepositoryUsageAspect")) {
 				callerInfo = element.getClassName() + "." + element.getMethodName() +
 						" (Line: " + element.getLineNumber() + ")";
 				break;
@@ -61,10 +61,10 @@ public class RepositoryUsageAspect {
 
 /*
 //@Around("(execution(* org.springframework.data.repository.Repository+.*(..)) || " +
-//"execution(* com.vorwerk.dspro.usermanagement..*Repository.*(..))) && " +
-//"this(com.vorwerk.dspro.usermanagement.repository.UserRepository)")
+//"execution(* com.github.yash777.usermanagement..*Repository.*(..))) && " +
+//"this(com.github.yash777.usermanagement.repository.UserRepository)")
  * 
-//@Around("execution(* com.vorwerk.dspro.configuration.repository.CompanyAuthenticationRepository.*(..))")
+//@Around("execution(* com.github.yash777.configuration.repository.CompanyAuthenticationRepository.*(..))")
 	public Object logRepositoryCall(ProceedingJoinPoint pjp) throws Throwable {
 		long startTime = System.currentTimeMillis();
 		logger.info("Thread: {} | {}.{} - Start Time: {} ms",

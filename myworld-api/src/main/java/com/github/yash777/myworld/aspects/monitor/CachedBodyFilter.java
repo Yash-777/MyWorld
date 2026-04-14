@@ -17,7 +17,8 @@ public class CachedBodyFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		if (request instanceof HttpServletRequest httpRequest) {
+		if (request instanceof HttpServletRequest) {
+			HttpServletRequest httpRequest = (HttpServletRequest) request;
 			CachedBodyHttpServletRequest wrappedRequest = new CachedBodyHttpServletRequest(httpRequest);
 			wrappedRequest.setAttribute("cachedRequestBody", wrappedRequest.getCachedBodyAsString());
 			chain.doFilter(wrappedRequest, response);
